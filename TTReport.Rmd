@@ -1,0 +1,188 @@
+---
+title: "TreeTalkers Check ULE"
+author: "Isabel Grisales"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{=tex}
+\setlength\parindent{0pt}
+\setlength{\parskip}{0pt}
+```
+```{r setup, include=F, echo = F,  fig.align="center", results="asis"}
+knitr::opts_chunk$set(warning = FALSE, echo = F)
+```
+
+# 1. Summary of TT Alerts
+
+This information is showing the alerts coming from the TreeTalkers data.
+
+Note: The meaning of "YYYYww" is the year and week of the year from data that were assessed periodically every week.
+
+```{r 1, message=FALSE, results="asis"}
+
+library(ggplot2)
+whichDay <- as.Date(Sys.Date())
+
+#input_path <- file.path("C:", "out", "1")
+input_files_csv <- list.files("C:/TreeTalkerDB/TTResults", full.names = T, pattern = ".csv")
+
+# Read input files
+lista_files_read <- lapply(input_files_csv, read.table, sep = ";", header = T)
+
+cloudDB <- lista_files_read[[1]]
+cloudAlert <- lista_files_read[[2]]   #
+angleAlert <- lista_files_read[[3]]   #
+batteryAlert <- lista_files_read[[4]] #
+growthAlert <- lista_files_read[[5]]  #
+SFDAlert <- lista_files_read[[6]]     #
+FullDB <- lista_files_read[[7]]
+
+# TTAlerts
+if(nrow(batteryAlert)==0){
+cat("No issues related with the batteries where automatically identified")  
+}else{
+cat("The number of battery issues are", nrow(batteryAlert))
+knitr::kable(batteryAlert, caption = "Issues related with batteries (mV)")
+}
+
+cat("  \n")
+cat("  \n")
+cat("  \n")
+
+if(nrow(SFDAlert)==0){
+cat("No issues related with the sap flux density where automatically identified")  
+}else{
+cat("The number of sap flux density issues are", nrow(SFDAlert))
+knitr::kable(SFDAlert, caption = "Issues related with sap flux density (l d m-2 h-1)")
+}
+
+cat("  \n")
+cat("  \n")
+cat("  \n")
+
+if(nrow(growthAlert)==0){
+cat("No issues related with the weekly radial growth where automatically identified")  
+}else{
+cat("The number of weekly radial growth issues are", nrow(growthAlert))
+knitr::kable(growthAlert, caption = "Issues related with the weekly radial growth (mm)")
+}
+
+cat("  \n")
+cat("  \n")
+cat("  \n")
+
+if(nrow(angleAlert)==0){
+cat("No issues related with the tree angles where automatically identified")  
+}else{
+cat("The number of tree angles issues are", nrow(angleAlert))
+knitr::kable(angleAlert, caption = "Issues related with the tree angles (°)")
+}
+
+cat("  \n")
+cat("  \n")
+cat("  \n")
+
+```
+
+
+# 2. Summary of TTCloud Alerts
+
+This information is showing the alerts coming from the TreeTalkers data.
+Note: Column "issue" reports how many and which sensors are affected.
+
+```{r 2, message=FALSE, results="asis"}
+
+## Clouds Alerts
+if(nrow(cloudAlert)==0){
+cat("No issues related with the TTCloud where automatically identified")  
+}else{
+cat("The number of TTCloud issues are", nrow(cloudAlert))
+knitr::kable(cloudAlert, caption = "Issues related with TTClouds")
+}
+
+cat("  \n")
+cat("  \n")
+cat("  \n")
+
+```
+\newpage
+
+# 3. TT graphs
+
+The graphs are important to understand if the sensors are working properly and to detect the trend of the TreeTalkers batteries, air temperature, air humidity, weekly radial growth, sap flux density and the spectral bands per each tree.
+
+## 3.1. Temperature
+
+```{r Temperature, echo=FALSE, fig.show='asis', out.width='100%', fig.align='center', out.extra=NULL, fig.cap ="Air temperature"}
+
+Plots_dir_list <- list.dirs("C:/TreeTalkerDB/TTPlots", recursive = FALSE)
+
+temperaturePlots <- list.files(Plots_dir_list, pattern = "Temperature", full.names = TRUE)
+
+knitr::include_graphics(temperaturePlots)
+```
+\newpage
+
+## 3.2. Humidity
+
+```{r Humidity, echo=FALSE, fig.show='asis', out.width='100%', fig.align='center', out.extra=NULL, fig.cap ="Air Humidity"}
+
+HumidityPlots <- list.files(Plots_dir_list, pattern = "Humidity", full.names = TRUE)
+
+knitr::include_graphics(HumidityPlots)
+```
+\newpage
+
+## 3.3. Stem radial growth variation
+
+```{r RadialGrowth, cho=FALSE, out.width='100%', fig.show='asis', fig.align='center', out.extra=NULL, fig.cap = "Stem radial growth variation"}
+
+growthPlots <- list.files(Plots_dir_list, pattern = "RadialGrowth", full.names = TRUE)
+
+knitr::include_graphics(growthPlots)
+```
+\newpage
+
+## 3.4. Sap flux Density
+
+```{r Sapflow, echo=FALSE, out.width='100%', fig.show='asis', fig.align='center', out.extra=NULL, fig.cap ="Sap flux Density"}
+
+SapfluxDensityPlots <- list.files(Plots_dir_list, pattern = "sapFluxDensity", full.names = TRUE)
+
+knitr::include_graphics(SapfluxDensityPlots)
+```
+\newpage
+
+## 3.5. Spectral light bands through the canopy
+
+```{r SpectralBands, echo=FALSE, out.width='100%', fig.show='asis', fig.align='center', out.extra=NULL, fig.cap ="Spectral light bands through the canopy"}
+
+spectrometerPlots <- list.files(Plots_dir_list, pattern = "SpectralBands", full.names = TRUE)
+
+knitr::include_graphics(spectrometerPlots)
+```
+\newpage
+
+## 3.6. Stem Water Content
+
+```{r RelStemSaturation, echo=FALSE, out.width='100%', fig.show='asis', fig.align='center', out.extra=NULL, fig.cap ="Stem Water Content"}
+
+stwcPlots <- list.files(Plots_dir_list, pattern = "RelStemSaturation", full.names = TRUE)
+
+knitr::include_graphics(stwcPlots)
+```
+\newpage
+
+## 3.7. TreeTalkers Battery Level
+
+```{r Battery, echo=FALSE, out.width='100%', fig.show='asis', fig.align='center', out.extra=NULL, fig.cap ="TreeTalkers Battery Level"}
+
+batteryPlots <- list.files(Plots_dir_list, pattern = "Battery", full.names = TRUE)
+
+knitr::include_graphics(file.path(batteryPlots))
+```
