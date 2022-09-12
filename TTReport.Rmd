@@ -21,7 +21,7 @@ knitr::opts_chunk$set(warning = FALSE, echo = F)
 
 This information is showing the alerts coming from the TreeTalkers data.
 
-Note: The meaning of "YYYYww" is the year and week of the year from data that were assessed periodically every week.
+Note: The meaning of "YYYYww" is the year and week of the year from data that were assessed periodically every week. 
 
 ```{r 1, message=FALSE, results="asis"}
 
