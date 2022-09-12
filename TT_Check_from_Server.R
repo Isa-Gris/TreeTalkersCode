@@ -4,7 +4,9 @@
 ###' E-MAIL: igriss00@estudiantes.unileon.es
 ###' DATE: August, 2022
 ###' Developed with R 4.2.1. and RStudio (2022.07.1+554)
-
+###' COLLABORATOR: Laboratorio de teledetección próxima a la tierra del observatorio 
+###' de cambio global de bosque mediterráneo
+ 
 
 # Loading required packages
 required_packages <- c("signal", "lubridate", "ggplot2", "dplyr",
